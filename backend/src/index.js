@@ -1,0 +1,25 @@
+// src/index.js or src/bootstrap.js
+
+'use strict';
+
+module.exports = {
+  /**
+   * An asynchronous register function that runs before
+   * your application is initialized.
+   *
+   * This gives you an opportunity to extend code.
+   */
+  register({ strapi }) {
+    // Register your middleware
+    strapi.middlewares['is-owner'] = require('./middlewares/is-owner');
+  },
+
+  /**
+   * An asynchronous bootstrap function that runs before
+   * your application gets started.
+   *
+   * This gives you an opportunity to set up your data model,
+   * run jobs, or perform some special logic.
+   */
+  bootstrap({ strapi }) { },
+};
