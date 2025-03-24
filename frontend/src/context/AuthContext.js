@@ -5,8 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-
-const API_URL = process.env.API_URL || "http://localhost:1337/api";
+import { API_URL } from "@/utils/config";
 
 const AuthContext = createContext();
 
@@ -15,6 +14,10 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
+    /**
+     * Effect to check authentication token on mount
+     * if token exists, fetch user data, otherwise redirect to login to reauthenticate themselves
+     */
     useEffect(() => {
         const token = Cookies.get("token");
         if (token) {
@@ -24,6 +27,12 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
+    /**
+     * Fetches user details using the token in Cookies
+     * redirects to courses page if successful, otherwise logs out
+     * 
+     * @param {string} token - stored token
+     */
     const fetchUser = async (token) => {
         setLoading(true);
         try {
@@ -31,7 +40,7 @@ export const AuthProvider = ({ children }) => {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setUser(res.data);
-            router.push('/courses')
+            router.push('/courses');
         } catch (error) {
             console.error("Failed to fetch user:", error);
             logout();
@@ -40,6 +49,12 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Handles user login
+     * Stores authentication token in cookies on success and redirects to courses page
+     * 
+     * @param {Object} credentials - User credentials
+     */
     const login = async ({ email, password }) => {
         setLoading(true);
         try {
@@ -54,18 +69,22 @@ export const AuthProvider = ({ children }) => {
             setUser(user);
         } catch (error) {
             console.error("Login error:", error);
-            toast.error('Authorization failed')
+            toast.error('Authorization failed');
         } finally {
             setLoading(false);
         }
     };
 
+    /**
+     * Handles user registration
+     * Stores authentication token in cookies on success and redirects to courses page
+     * 
+     * @param {Object} credentials - User credentials
+     */
     const signup = async ({ username, email, password }) => {
-
         if (!username || !email || !password) return toast.error('Please fill all required fields');
 
         setLoading(true);
-
         try {
             const res = await axios.post(`${API_URL}/auth/local/register`, {
                 username,
@@ -84,6 +103,11 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    /**
+     * Logs out the user
+     * Removes authentication token and resets user state
+     * Redirects to login page
+     */
     const logout = () => {
         router.push("/login");
         Cookies.remove("token");

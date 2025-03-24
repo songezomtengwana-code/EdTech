@@ -1,6 +1,6 @@
 "use client"
-import CourseCardSkeleton from '@/components/course-card-skeleton';
-import CoursePreview from '@/components/course-preview';
+import CourseCardSkeleton from '@/components/course-card-skeleton/Index';
+import CoursePreview from '@/components/course-preview/Index';
 import { deleteCourse, getCourseById } from '@/services/CourseService';
 import { ArrowBackIos, Delete, Edit } from '@mui/icons-material';
 import Link from 'next/link';
@@ -28,6 +28,8 @@ export default function page() {
     }
 
     useEffect(() => {
+        if (!id) return;
+
         const fetchCourse = async (id) => {
             setLoading(true)
             try {
@@ -36,8 +38,7 @@ export default function page() {
             } catch (error) {
                 const { status, message } = error
                 if (status === 403) {
-                    router.back();
-                    return toast.error(message);
+                    return toast.error('You have no access to this course');
                 }
                 toast.error(message || 'Something went wrong!');
             } finally {
@@ -45,8 +46,8 @@ export default function page() {
             }
         }
 
-        if (id) fetchCourse(id);
-    }, [])
+        fetchCourse(id);
+    }, [id])
     return (
         <div className='container py-6 px-6 lg:px-0'>
             <div className="flex justify-between items-center mb-6 md:flex-row gap-4">

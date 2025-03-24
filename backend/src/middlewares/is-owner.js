@@ -34,6 +34,10 @@ module.exports = (config, { strapi }) => {
                 populate: ['owner'],
             });
 
+            if (!course) {
+                return ctx.notFound('You are not authorized to access this course');
+            }
+
             if (!course || !course.owner || course.owner.id !== user.id) {
                 return ctx.forbidden('You are not authorized to access this course');
             }

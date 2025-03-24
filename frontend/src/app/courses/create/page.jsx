@@ -4,11 +4,10 @@ import { useForm } from "react-hook-form";
 import { createCourse } from "@/services/CourseService";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { CircularProgress } from "@mui/material";
-import LoadingOverlay from "@/components/loading-overlay";
+import LoadingOverlay from "@/components/loading-overlay/Index";
 
 export default function CreateCoursePage() {
-    const { register, handleSubmit, reset } = useForm();
+    const { register, handleSubmit } = useForm();
     const router = useRouter();
     const { user } = useAuth();
     const [loading, setLoading] = useState(false);
@@ -25,12 +24,9 @@ export default function CreateCoursePage() {
                 owner: user?.documentId
             };
 
-            setTimeout(async () => {
-                await createCourse(formData).then(() => {
-                    router.push('/courses');
-                })
-            }, 5000);
-            console.log("Course created successfully!");
+            await createCourse(formData).then(() => {
+                router.push('/courses');
+            })
         } catch (err) {
             console.error("Failed to create course!", err);
         } finally {
@@ -60,7 +56,6 @@ export default function CreateCoursePage() {
                             placeholder="Enter course title"
                         />
                     </div>
-
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Price</label>
                         <input

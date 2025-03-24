@@ -7,7 +7,7 @@ import { useState } from "react";
 import { TextField, Button, Container, Typography, Box, Alert } from "@mui/material";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import LoadingOverlay from "@/components/loading-overlay";
+import LoadingOverlay from "@/components/loading-overlay/Index";
 
 export default function LoginPage() {
     const { login, loading } = useAuth();

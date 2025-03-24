@@ -1,5 +1,5 @@
 "use client"
-import LoadingOverlay from '@/components/loading-overlay';
+import LoadingOverlay from '@/components/loading-overlay/Index';
 import { getCourseById, updateCourse } from '@/services/CourseService';
 import { CircularProgress } from '@mui/material';
 import { useParams, useRouter } from 'next/navigation'

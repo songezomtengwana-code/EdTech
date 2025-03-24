@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getCourses } from "@/services/CourseService";
-import CourseCard from "@/components/course-card";
+import CourseCard from "@/components/course-card/Index";
 import Link from "next/link";
 import { Add } from "@mui/icons-material";
-import CourseCardSkeleton from "@/components/course-card-skeleton";
+import CourseCardSkeleton from "@/components/course-card-skeleton/Index";
 
 export default function CoursesPage() {
     const [courses, setCourses] = useState([]);
@@ -26,7 +26,7 @@ export default function CoursesPage() {
             }
         };
 
-        fetchCourses();
+        if (courses.length === 0) fetchCourses();
     }, []);
 
     return (
